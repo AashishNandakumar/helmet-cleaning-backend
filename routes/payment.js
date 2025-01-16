@@ -59,7 +59,8 @@ router.post("/payment-webhook", async (req, res) => {
             { new: true },
         );
 
-        if (status === "paid") {
+        // IMP: only in test mode
+        if (status === "captured") {
             // create MQTT message
             const message = JSON.stringify({
                 event: "payment_success",
