@@ -52,6 +52,7 @@ router.post("/payment-webhook", async (req, res) => {
         console.log("Payment verified:", req.body);
 
         const { order_id, status } = req.body.payload.payment.entity;
+        console.log(`orderid: ${order_id}, status: ${status}`);
         await Payment.findOneAndUpdate(
             { razorpayOrderId: order_id },
             { status },
