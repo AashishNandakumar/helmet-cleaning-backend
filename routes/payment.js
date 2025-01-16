@@ -70,7 +70,7 @@ router.post("/payment-webhook", async (req, res) => {
 
             // publish message to AWS IoT Core topic
             device.publish("helmet/cleaning/success", message, (error) => {
-                if (err) {
+                if (error) {
                     console.error("failed to publish message:", error);
                     res.status(500).json({
                         success: false,
