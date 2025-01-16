@@ -51,16 +51,19 @@ router.post("/payment-webhook", async (req, res) => {
     if (generatedSignature === signature) {
         console.log("Payment verified:", req.body);
 
-        const { order_id, status } = req.body.payload.payment.entity;
-        console.log(`orderid: ${order_id}, status: ${status}`);
+        const { order_id } = req.body.payload.payment.entity;
+        const status = req.body.event.split(".")[1];
+        console.log(`status: ${status}`);
+        console.log(`orderid: ${order_id}`);
+
         await Payment.findOneAndUpdate(
             { razorpayOrderId: order_id },
             { status },
             { new: true },
         );
 
-        // IMP: only in test mode
-        if (status === "captured") {
+        // IMP: only in test mode (in live - paid status will be captured)
+        if (status === "paid") {
             // create MQTT message
             const message = JSON.stringify({
                 event: "payment_success",
