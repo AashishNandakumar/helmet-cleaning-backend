@@ -11,7 +11,7 @@ const razorpay = new Razorpay({
 });
 
 router.post("/create-order", async (req, res) => {
-    const { userId, amount, currency, receipt } = req.body;
+    const { amount, currency, receipt } = req.body;
 
     try {
         const order = await razorpay.orders.create({
@@ -21,7 +21,6 @@ router.post("/create-order", async (req, res) => {
         });
 
         const payment = new Payment({
-            userId,
             razorpayOrderId: order.id,
             status: "created",
             amount,
