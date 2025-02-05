@@ -108,13 +108,16 @@ void connectAWS() {
     client.setServer(mqtt_server, mqtt_port);
     client.setCallback(messageReceived);
 
+    // Generate a unique client id to force a new session
+    String clientId = "ESP32Client-" + String(random(0xffff), HEX);
+
     while (!client.connected()) {
         Serial.print("Connecting to AWS IoT...");
-        if (client.connect("ESP32Client")) {
-            Serial.println("connected!");
+        if (client.connect(clientId.c_str())) {
+            Serial.println(" connected!");
             client.subscribe(topic);
         } else {
-            Serial.print("failed, rc=");
+            Serial.print(" failed, rc=");
             Serial.print(client.state());
             Serial.println(" retrying in 5 seconds...");
             delay(5000);
